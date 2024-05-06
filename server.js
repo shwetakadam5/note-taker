@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 3001;
@@ -18,28 +17,12 @@ app.use('/api', api);
 
 // This view route is a GET route for the homepage
 app.get('/', (req, res) => {
-
-    console.log(__dirname);
     res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
+// This view route is a GET route for the notes
 app.get('/notes', (req, res) => {
-
-    console.log(__dirname);
     res.sendFile(path.join(__dirname, '/public/notes.html'));
-});
-
-
-
-
-
-
-
-
-
-app.get('/secret', (req, res) => {
-    console.log("credential", process.env.USER);
-    res.end();
 });
 
 app.listen(PORT, () =>
