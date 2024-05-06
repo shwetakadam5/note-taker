@@ -29,8 +29,8 @@ notes.post('/', (req, res) => {
         readFromFile('./db/db.json').then((data) => {
             const listOfNotes = JSON.parse(data);
             listOfNotes.push(newNote);
-            writeToFile('./db/db.json', JSON.stringify(listOfNotes)).then((data) => {
-                res.status(200).send(`Note added successfully`);
+            writeToFile('./db/db.json', JSON.stringify(listOfNotes)).then(() => {
+                res.status(201).send(`Note added successfully`);
             });
         });
     }
@@ -45,7 +45,7 @@ notes.delete('/:id', (req, res) => {
     readFromFile('./db/db.json').then((data) => {
         const listOfNotes = JSON.parse(data);
         let filteredListOfNotes = listOfNotes.filter(el => el.id !== req.params.id);
-        writeToFile('./db/db.json', JSON.stringify(filteredListOfNotes)).then((data) => {
+        writeToFile('./db/db.json', JSON.stringify(filteredListOfNotes)).then(() => {
             res.status(200).send(`Note deleted successfully`);
         });
 
