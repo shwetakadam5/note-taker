@@ -13,7 +13,6 @@ notes.get('/', (req, res) => {
 
 
 
-
 // Post Route for adding the notes
 notes.post('/', (req, res) => {
     console.info(`${req.method} request received for adding notes`);
@@ -41,11 +40,33 @@ notes.post('/', (req, res) => {
 
         });
 
-    } else {
-        res.error('Error in adding note');
     }
 
 
+
+});
+
+
+notes.delete('/:id', (req, res) => {
+    console.info(`${req.method} request received for deleting notes`);
+    console.log(req.params.id);
+
+
+    readFromFile('./db/db.json').then((data) => {
+        console.log(JSON.parse(data));
+        const listOfNotes = JSON.parse(data);
+        let filteredListOfNotes = listOfNotes.filter(el => el.id !== req.params.id);
+
+        console.log(filteredListOfNotes);
+
+
+        writeToFile('./db/db.json', JSON.stringify(filteredListOfNotes)).then((data) => {
+
+            res.json(`Note deleted successfully`);
+
+        });
+
+    });
 
 });
 
