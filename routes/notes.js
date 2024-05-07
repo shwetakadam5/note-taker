@@ -14,7 +14,7 @@ notes.get('/', (req, res) => {
 // Post Route for adding the notes
 notes.post('/', (req, res) => {
 
-    console.info(`${req.method} request received for adding notes`);
+    console.info(`${req.method} request received for adding note`);
     // Destructuring assignment for the items in req.body
     const { title, text } = req.body;
 
@@ -47,12 +47,11 @@ notes.post('/', (req, res) => {
 // Delete Route for deleting the note based on id.
 notes.delete('/:id', (req, res) => {
 
-    console.info(`${req.method} request received for deleting notes`);
+    console.info(`${req.method} request received for deleting note.`);
     if (req.params.id) {
         readFromFile('./db/db.json').then((data) => {
             const listOfNotes = JSON.parse(data);
             let noteToDelete = listOfNotes.filter(el => el.id === req.params.id);
-            console.log(noteToDelete.length);
             if (noteToDelete.length) {
                 let filteredListOfNotes = listOfNotes.filter(el => el.id !== req.params.id);
                 writeToFile('./db/db.json', JSON.stringify(filteredListOfNotes)).then(() => {
