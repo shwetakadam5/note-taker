@@ -30,8 +30,15 @@ notes.post('/', (req, res) => {
             const listOfNotes = JSON.parse(data);
             listOfNotes.push(newNote);
             writeToFile('./db/db.json', JSON.stringify(listOfNotes)).then(() => {
-                res.status(201).send(`Note added successfully`);
+                res.status(201).json({
+                    "Success": "Note added successfully.",
+                    "Note Created:": newNote
+                });
             });
+        });
+    } else {
+        res.status(400).json({
+            "Error": "Invalid request."
         });
     }
 
@@ -41,15 +48,31 @@ notes.post('/', (req, res) => {
 notes.delete('/:id', (req, res) => {
 
     console.info(`${req.method} request received for deleting notes`);
+    if (req.params.id) {
+        readFromFile('./db/db.json').then((data) => {
+            const listOfNotes = JSON.parse(data);
+            let noteToDelete = listOfNotes.filter(el => el.id === req.params.id);
+            console.log(noteToDelete.length);
+            if (noteToDelete.length) {
+                let filteredListOfNotes = listOfNotes.filter(el => el.id !== req.params.id);
+                writeToFile('./db/db.json', JSON.stringify(filteredListOfNotes)).then(() => {
+                    res.status(200).json({
+                        "Success": "Note deleted successfully.",
+                        "Note Deleted:": noteToDelete
 
-    readFromFile('./db/db.json').then((data) => {
-        const listOfNotes = JSON.parse(data);
-        let filteredListOfNotes = listOfNotes.filter(el => el.id !== req.params.id);
-        writeToFile('./db/db.json', JSON.stringify(filteredListOfNotes)).then(() => {
-            res.status(200).send(`Note deleted successfully`);
+                    });
+                });
+            } else {
+                res.status(406).json({
+                    "Error": "The Note ID does not exist to delete."
+                });
+            }
         });
-
-    });
+    } else {
+        res.status(400).json({
+            "Error": "Note ID not provided."
+        });
+    }
 
 });
 
